@@ -3,7 +3,7 @@ prefixName:
 siteName: 花开一季 叶落一地
 # favicon and site master avatar
 favicon: https://cdn.jsdelivr.net/gh/xbclub/imageCDN//upload/20200311210331.ico
-avatar: https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205052347607.jpeg
+avatar: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205052347607.jpeg
 url: https://hjc-owo.github.io
 description: 是最最可爱的花叶小姐姐的说！
 cdn:
@@ -12,7 +12,7 @@ pjax: 1
 mathjax: 0
 
 notice: 是来看花叶小姐姐的吗？（探头
-lazyloadImg: https://cdn.jsdelivr.net/gh/xbclub/imageCDN//upload/20200306164050.gif
+lazyloadImg: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205052347607.jpeg
 #seo优化设定
 seo:
   #网站简介
@@ -47,15 +47,15 @@ homePageSortType: -1
 homeArticleShown: 10
 # 背景图片 更好的修改
 bg:
-  - https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145932.png
-  - https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145931.jpg
-  - https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145929.jpg
-  - https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145928.jpg
-  - https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145926.jpg
-  - https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205062025714.png
+  - https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145932.png
+  - https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145931.jpg
+  - https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145929.jpg
+  - https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145928.jpg
+  - https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145926.jpg
+  - https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205062025714.png
 
 # 背景图片样式 空 原图效果 filter-dim 阴影 filter-grid 横条 filter-dot 点点
-bgclass: 
+bgclass:
 
 # startdash url, title, desc img
 startdash:
@@ -63,19 +63,19 @@ startdash:
       url: /,
       title: Sakura,
       desc: 本站 hexo 主题,
-      img: https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145928.jpg,
+      img: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145928.jpg,
     }
   - {
       url: https://space.bilibili.com/435896409,
       title: Bilibili,
       desc: 是花叶小姐姐的B站,
-      img: https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205070145931.jpg,
+      img: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205070145931.jpg,
     }
   - {
       url: /,
       title: 点点试试？,
       desc: 还是这一页哒！,
-      img: https://cdn.jsdelivr.net/gh/hjc-owo/hjc-owo.github.io@img/202205062025714.png,
+      img: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205062025714.png,
     }
 
 # your site build time or founded date (建站日期）
