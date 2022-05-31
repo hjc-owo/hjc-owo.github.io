@@ -8,7 +8,7 @@ keywords:
 description:
 top_img: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205062025714.png
 comments:
-cover:
+cover: https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205062025714.png
 toc:
 toc_number:
 toc_style_simple:
