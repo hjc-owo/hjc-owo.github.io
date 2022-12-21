@@ -1,0 +1,449 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>代码生成 | 花开一季 叶落一地</title><meta name="keywords" content="compiler"><meta name="author" content="花叶小姐姐"><meta name="copyright" content="花叶小姐姐"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="代码生成设计代码生成综述代码生成，我使用的是 LLVM IR 作为中间代码，最后将 LLVM IR 转换成 MIPS 汇编。主要是考虑到软院前几届的实验都是使用的 LLVM IR，有一套教程体系可以参考，在我生成 LLVM IR 中间代码的过程中，有很多地方都参考了软院之前的教程。 软院的 LLVM IR 教程是循序渐进的，先从最基本的 main 开始，一步一步往上添加功能，最后生成可以运行的 L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码生成">
+<meta property="og:url" content="http://hjc-owo.github.io/2022/12/21/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="花开一季 叶落一地">
+<meta property="og:description" content="代码生成设计代码生成综述代码生成，我使用的是 LLVM IR 作为中间代码，最后将 LLVM IR 转换成 MIPS 汇编。主要是考虑到软院前几届的实验都是使用的 LLVM IR，有一套教程体系可以参考，在我生成 LLVM IR 中间代码的过程中，有很多地方都参考了软院之前的教程。 软院的 LLVM IR 教程是循序渐进的，先从最基本的 main 开始，一步一步往上添加功能，最后生成可以运行的 L">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212211802894.png">
+<meta property="article:published_time" content="2022-12-21T10:01:17.000Z">
+<meta property="article:modified_time" content="2022-12-21T10:03:45.711Z">
+<meta property="article:author" content="花叶小姐姐">
+<meta property="article:tag" content="compiler">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212211802894.png"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://hjc-owo.github.io/2022/12/21/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '代码生成',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-12-21 18:03:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202209142352029.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212211802894.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">花开一季 叶落一地</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">代码生成</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-12-21T10:01:17.000Z" title="Created 2022-12-21 18:01:17">2022-12-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-12-21T10:03:45.711Z" title="Updated 2022-12-21 18:03:45">2022-12-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="代码生成"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="代码生成设计"><a href="#代码生成设计" class="headerlink" title="代码生成设计"></a>代码生成设计</h1><h2 id="代码生成综述"><a href="#代码生成综述" class="headerlink" title="代码生成综述"></a>代码生成综述</h2><p>代码生成，我使用的是 LLVM IR 作为中间代码，最后将 LLVM IR 转换成 MIPS 汇编。主要是考虑到软院前几届的实验都是使用的 LLVM IR，有一套教程体系可以参考，在我生成 LLVM IR 中间代码的过程中，有很多地方都参考了软院之前的教程。</p>
+<p>软院的 LLVM IR 教程是循序渐进的，先从最基本的 <code>main</code> 开始，一步一步往上添加功能，最后生成可以运行的 LLVM IR 代码。</p>
+<p>教程链接如下：<a target="_blank" rel="noopener" href="https://buaa-se-compiling.github.io/miniSysY-tutorial">miniSysY 编译实验</a></p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092002983.png" alt="截屏2022-12-09 20.02.51"></p>
+<h2 id="LLVM-IR-的结构"><a href="#LLVM-IR-的结构" class="headerlink" title="LLVM IR 的结构"></a>LLVM IR 的结构</h2><p>关于 LLVM IR 的结构，也是在软院的教程上学来的，链接地址：<a target="_blank" rel="noopener" href="https://buaa-se-compiling.github.io/miniSysY-tutorial/pre/llvm_ir_quick_primer.html">LLVM IR 的结构</a></p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092009069.png" alt="截屏2022-12-09 20.06.32"></p>
+<p>讲道理，感觉 LLVM IR 的结构完全不需要我来介绍，但是还是可以说两句。</p>
+<h3 id="总体结构"><a href="#总体结构" class="headerlink" title="总体结构"></a>总体结构</h3><ol>
+<li>LLVM IR 文件的基本单位称为 <code>module</code>（本实验中涉及到的部分均为单 <code>module</code>，因为本实验只涉及到单文件编译）</li>
+<li>一个 <code>module</code> 中可以拥有多个顶层实体，比如 <code>function</code> 和 <code>global variable</code></li>
+<li>一个 <code>function define</code> 中至少有一个 <code>basicblock</code></li>
+<li>每个 <code>basicblock</code>中有若干 <code>instruction</code>，并且都以 <code>terminator instruction</code> 结尾</li>
+</ol>
+<p>表现在代码里的感觉应该是这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IRModule</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">IRModule</span> <span class="variable">module</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IRModule</span>();</span><br><span class="line">    <span class="keyword">private</span> List&lt;GlobalVar&gt; globalVars;</span><br><span class="line">    <span class="keyword">private</span> IList&lt;Function, IRModule&gt; functions;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Instruction&gt; instructions;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">IRModule</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.globalVars = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="built_in">this</span>.functions = <span class="keyword">new</span> <span class="title class_">IList</span>&lt;&gt;(<span class="built_in">this</span>);</span><br><span class="line">        <span class="built_in">this</span>.instructions = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> IRModule <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">module</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>IList&lt;N, L&gt;</code>是我自己添加的一种结构，本质就是一个可以用<code>for</code>遍历的链表，其中整条链表的类型是<code>L</code>，链表里面存的元素的类是<code>N</code>。使用这种结构可以方便地对元素之间的位置关系作出调整。</p>
+<h3 id="函数定义与声明"><a href="#函数定义与声明" class="headerlink" title="函数定义与声明"></a>函数定义与声明</h3><p>定义就是<code>define</code>，声明就是<code>declare</code>。具体语法看示例就可以了。</p>
+<blockquote>
+<p><strong>对于 IO 的说明</strong></p>
+<p>评测机提供了以下函数用于 IO，请在输出的 LLVM IR 头部显式声明这些函数（没有实际使用的函数可以不声明）：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="type">i32</span> <span class="title">@getint</span>()       <span class="comment">; 读取一个整数</span></span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putint</span>(<span class="type">i32</span>)   <span class="comment">; 输出一个整数</span></span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putch</span>(<span class="type">i32</span>)    <span class="comment">; 输出一个字符</span></span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putstr</span>(<span class="type">i8</span>*)   <span class="comment">; 输出字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>测试时，首先用 C 语言实现上述四个函数，然后用以下命令编译为 LLVM 链接库（假设 C 语言实现文件为 <code>lib.c</code> ）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -emit-llvm -S -o lib.ll lib.c</span><br></pre></td></tr></table></figure>
+
+<p>将输出的 <code>llvm_ir.txt</code> 与上一步编译好的链接库 <code>lib.ll</code> 放置于同一目录下，用以下命令链接并解释执行 IR ：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">llvm-link -S -o run.ll llvm_ir.txt lib.ll</span><br><span class="line">lli run.ll</span><br></pre></td></tr></table></figure>
+
+<p>评测机提供的 IO 函数同时支持字符串输出和单个字符输出（分别对应 MARS 的 4 号和 11 号 syscall），可以自行选择输出方式（选取一种或混合使用均可），具体用法参见样例。如果选用字符串方式输出，可参考 <a target="_blank" rel="noopener" href="https://llvm.org/docs/LangRef.html#complex-constants">字符串常量的表示</a> 与 <a target="_blank" rel="noopener" href="https://llvm.org/docs/LangRef.html#getelementptr-instruction">getelementptr 指令</a> 。</p>
+<p>例如<code>testfile.txt</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> res;</span><br><span class="line">    res = getint();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;res = %d\n&quot;</span>, res);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果使用单个字符输出：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="type">i32</span> <span class="title">@getint</span>()</span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putint</span>(<span class="type">i32</span>)</span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putch</span>(<span class="type">i32</span>)</span><br><span class="line"><span class="keyword">define</span> <span class="type">i32</span> <span class="title">@main</span>() &#123;</span><br><span class="line">    <span class="variable">%1</span> <span class="operator">=</span> <span class="keyword">call</span> <span class="type">i32</span> <span class="title">@getint</span>()</span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">114</span>)   <span class="comment">; &#x27;r&#x27;</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">101</span>)   <span class="comment">; &#x27;e&#x27;</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">115</span>)   <span class="comment">; &#x27;s&#x27;</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">32</span>)    <span class="comment">; &#x27; &#x27;</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">61</span>)    <span class="comment">; &#x27;=&#x27;</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">32</span>)    <span class="comment">; &#x27; &#x27;</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putint</span>(<span class="type">i32</span> <span class="variable">%1</span>)</span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putch</span>(<span class="type">i32</span> <span class="number">10</span>)    <span class="comment">; &#x27;\n&#x27;</span></span><br><span class="line">    <span class="keyword">ret</span> <span class="type">i32</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果使用字符串输出：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="type">i32</span> <span class="title">@getint</span>()</span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putint</span>(<span class="type">i32</span>)</span><br><span class="line"><span class="keyword">declare</span> void <span class="title">@putstr</span>(<span class="type">i8</span>*)</span><br><span class="line"><span class="title">@_str_1</span> <span class="operator">=</span> <span class="keyword">constant</span> [<span class="number">7</span> <span class="keyword">x</span> <span class="type">i8</span>] <span class="keyword">c</span><span class="string">&quot;res = <span class="char escape_">\00</span>&quot;</span></span><br><span class="line"><span class="title">@_str_2</span> <span class="operator">=</span> <span class="keyword">constant</span> [<span class="number">2</span> <span class="keyword">x</span> <span class="type">i8</span>] <span class="keyword">c</span><span class="string">&quot;\0a<span class="char escape_">\00</span>&quot;</span> </span><br><span class="line"><span class="keyword">define</span> <span class="type">i32</span> <span class="title">@main</span>() &#123;</span><br><span class="line">    <span class="variable">%1</span> <span class="operator">=</span> <span class="keyword">call</span> <span class="type">i32</span> <span class="title">@getint</span>()</span><br><span class="line">    <span class="variable">%2</span> <span class="operator">=</span> <span class="keyword">getelementptr</span> <span class="keyword">inbounds</span> [<span class="number">7</span> <span class="keyword">x</span> <span class="type">i8</span>]<span class="punctuation">,</span> [<span class="number">7</span> <span class="keyword">x</span> <span class="type">i8</span>]* <span class="title">@_str_1</span><span class="punctuation">,</span> <span class="type">i32</span> <span class="number">0</span><span class="punctuation">,</span> <span class="type">i32</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putstr</span>(<span class="type">i8</span>* <span class="variable">%2</span>)</span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putint</span>(<span class="type">i32</span> <span class="variable">%1</span>)</span><br><span class="line">    <span class="variable">%3</span> <span class="operator">=</span> <span class="keyword">getelementptr</span> <span class="keyword">inbounds</span> [<span class="number">2</span> <span class="keyword">x</span> <span class="type">i8</span>]<span class="punctuation">,</span> [<span class="number">2</span> <span class="keyword">x</span> <span class="type">i8</span>]* <span class="title">@_str_2</span><span class="punctuation">,</span> <span class="type">i32</span> <span class="number">0</span><span class="punctuation">,</span> <span class="type">i32</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">call</span> void <span class="title">@putstr</span>(<span class="type">i8</span>* <span class="variable">%3</span>)</span><br><span class="line">    <span class="keyword">ret</span> <span class="type">i32</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="基本块（Basic-Block）"><a href="#基本块（Basic-Block）" class="headerlink" title="基本块（Basic Block）"></a>基本块（Basic Block）</h3><ul>
+<li>基本块中的代码是连续的语句序列</li>
+<li>程序的执行(控制流)只能从基本块的第一条语句进入</li>
+<li>程序的执行只能从基本块的最后一条语句离开</li>
+</ul>
+<p>形象地讲，一个基本块中的代码是顺序执行的，且顺序执行的代码都属于一个基本块。</p>
+<p>例如你有一份不含跳转（没有分支、循环）也没有函数调用的、只会顺序执行的代码，那么这份代码只有一个基本块。</p>
+<h3 id="指令（Instruction）"><a href="#指令（Instruction）" class="headerlink" title="指令（Instruction）"></a>指令（Instruction）</h3><p>指令指的是 LLVM IR 中的非分支指令（non-branching Instruction），通常用来进行某种计算或者是访存（比如上面例子中的 <code>add</code>、<code>load</code>），这些指令并不会改变程序的控制流。</p>
+<p>值得一提的是，<code>call</code> 指令也是非分支指令，因为在使用 <code>call</code> 调用函数时，我们并不关系被调用函数内部的具体情况（即使被调用函数内部存在的控制流），而是只关心我们传入的参数以及被调用函数的返回值，因此这并不会影响我们当前程序的控制流。</p>
+<h3 id="终结指令（Terminator-instruction）"><a href="#终结指令（Terminator-instruction）" class="headerlink" title="终结指令（Terminator instruction）"></a>终结指令（Terminator instruction）</h3><p>终结指令<strong>一定</strong>位于某个基本块的末尾（否则中间就改变了基本块内的控制流）；反过来，每个基本块的末尾也<strong>一定</strong>是一条终结指令（否则仍然是顺序执行的，基本块不应该结束）。终结指令决定了程序控制流的执行方向。例如，<code>ret</code> 指令会使程序的控制流返回到当前函数的调用者（可以理解为 <code>return</code>），<code>br</code> 指令表示根据标识符选择一个控制流的方向（可以理解为 <code>if</code>）。</p>
+<h2 id="一切皆-Value"><a href="#一切皆-Value" class="headerlink" title="一切皆 Value"></a>一切皆 <code>Value</code></h2><p>这是个夸张的说法，不过在 LLVM 架构中，的确几乎所有的东西都是一个 <code>Value</code>，这里有张继承关系图。</p>
+<img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092143394.png" alt="Value" style="zoom:67%;" />
+
+<ul>
+<li><code>BasicBlock</code>，<code>Argument</code>，<code>User</code> 都继承了 <code>Value</code> 类</li>
+<li><code>Constant</code> 和 <code>Instruction</code> 继承了 <code>User</code></li>
+<li>图中没有 <code>Function</code> 类，但实际上 <code>Function</code> 类通过多重继承继承了 <code>Constant</code> 类，所以 <code>Function</code> 也是 <code>Value</code> 和 <code>User</code></li>
+</ul>
+<p><code>Value</code> 是一个非常基础的基类，一个继承于 <code>Value</code> 的子类表示它的结果可以被其他地方使用。 一个继承于 <code>User</code> 的类表示它会使用一个或多个 <code>Value</code> 对象根据 <code>Value</code> 与 <code>User</code> 之间的关系，还可以引申出 use-def 链和 def-use 链这两个概念。use-def 链是指被某个 <code>User</code> 使用的 <code>Value</code> 列表，def-use 链是使用某个 <code>Value</code> 的 <code>User</code> 列表。实际上，LLVM 中还定义了一个 <code>Use</code> 类，<code>Use</code> 就是上述的使用关系中的一个边。 </p>
+<h2 id="我的-LLVM-IR-结构"><a href="#我的-LLVM-IR-结构" class="headerlink" title="我的 LLVM IR 结构"></a>我的 LLVM IR 结构</h2><p>考虑到我们编写的编译器的实际情况，在我的中间代码当中，继承关系简化为了下面的形式。</p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092145997.png" alt="截屏2022-12-09 21.33.50"></p>
+<p>Value 就是前面所描述的基类，是整个架构的基础。在 Value 当中有一个<code>List&lt;Use&gt; usesList</code>，表示使用了这个 Value 的 User 列表，这对应着 def-use 关系。</p>
+<p>User 是一个抽象类，描述了使用关系。在 User 当中可以得到操作数。</p>
+<p>GlobalVar 则是全局常量/变量，包含了是否是常量、常量/变量的值的属性。</p>
+<p>Const 是一个抽象类，描述的是常量。包括数字常量（ConstInt）和字符串常量（ConstString）。</p>
+<p>Function 是函数，函数需要存的信息就多一些，包括函数内的基本块列表、函数的参数列表、函数的前驱（哪些函数调用这个函数）后继（这个函数调用哪些函数）、以及是否是库函数。</p>
+<p>BasicBlock 则是基本块，需要存储基本块内的指令列表、基本块的前驱（哪些基本块能跳转到这个基本块）后继（这个基本块能跳转到哪些基本块）。</p>
+<h2 id="LLVM-中的-SSA"><a href="#LLVM-中的-SSA" class="headerlink" title="LLVM 中的 SSA"></a>LLVM 中的 SSA</h2><p>在 LLVM IR 中，变量是以 SSA 形式存在的，为了生成正确的 LLVM IR 并实现自己的编译器，对 SSA 的知识是必不可少的，LLVM IR 的代码有两种状态，分别是存取内存形式的 IR 以及带有 <code>phi</code> 指令的 SSA IR。</p>
+<p><strong>静态单赋值</strong>（Static Single Assignment, <strong>SSA</strong>）是编译器中间表示中非常重要的一个概念，它是一种变量的命名约定。当程序中的每个变量都有且只有一个赋值语句时，称一个程序是 SSA 形式的。</p>
+<p>在 LLVM IR 中，每个变量都在使用前都必须先定义，且每个变量只能被赋值一次（如果套用 C++ 的术语，就是说每个变量只能被初始化，不能被赋值），所以我们称 IR 是静态单赋值的。</p>
+<p>举一个例子，如果想要返回 <code>1 * 2 + 3</code> 的值，我们下意识地就会像这样写。</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">%0</span> <span class="operator">=</span> <span class="keyword">mul</span> <span class="type">i32</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span></span><br><span class="line"><span class="variable">%0</span> <span class="operator">=</span> <span class="keyword">add</span> <span class="type">i32</span> <span class="variable">%0</span><span class="punctuation">,</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">ret</span> <span class="type">i32</span> <span class="variable">%0</span></span><br></pre></td></tr></table></figure>
+
+<p>很合理，不是吗？但这样写实际上是错的，因为变量 <code>%0</code> 被赋值了两次。我们需要修改为</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">%0</span> <span class="operator">=</span> <span class="keyword">mul</span> <span class="type">i32</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span></span><br><span class="line"><span class="variable">%1</span> <span class="operator">=</span> <span class="keyword">add</span> <span class="type">i32</span> <span class="variable">%0</span><span class="punctuation">,</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">ret</span> <span class="type">i32</span> <span class="variable">%1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="SSA-的好处"><a href="#SSA-的好处" class="headerlink" title="SSA 的好处"></a>SSA 的好处</h3><p>考虑下面的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d1: y := <span class="number">1</span></span><br><span class="line">一些无关代码</span><br><span class="line">d2: y := <span class="number">2</span></span><br><span class="line">一些无关代码</span><br><span class="line">d3: x := y</span><br></pre></td></tr></table></figure>
+
+<p>很显然第一次对 <code>y</code> 赋值是不必要的，在对 <code>x</code> 赋值时使用的 <code>y</code> 的值时第二次赋值的结果，但是编译器必须要经过一个定义可达性（Reaching definition）分析才能做出判断。如果控制流十分复杂，那么进行到达定义分析也将会变得非常困难。</p>
+<p>但是，如果我们的代码是 SSA 形式的，那它就会长成这样。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d1: y1 := <span class="number">1</span></span><br><span class="line">一些无关代码</span><br><span class="line">d2: y2 := <span class="number">2</span></span><br><span class="line">一些无关代码</span><br><span class="line">d3: x := y2</span><br></pre></td></tr></table></figure>
+
+<p>编译器很容易就能够发现 <code>x</code> 是由 <code>y2</code> 赋值得到，而 <code>y2</code> 被赋值了 2，且 <code>x</code> 和 <code>y2</code> 都只能被赋值一次，显然得到 <code>x</code> 的值的路径就是唯一确定的，<code>d2</code> 就是 <code>d3</code> 的 reaching definition。而这样的信息，在编译器想要进行优化时会起到很大的作用。</p>
+<h3 id="SSA-需要思考的问题"><a href="#SSA-需要思考的问题" class="headerlink" title="SSA 需要思考的问题"></a>SSA 需要思考的问题</h3><p>但是，当你真正想实现 SSA 的时候，会发现一些问题。比如下面这张图片所展示的，假设你想用 IR 写一个用 C 语言循环实现的 factorial 函数（图片左部分），按照 C 语言的思路，很显然的会写成右边的形式。</p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092200977.jpg" alt="v2-beebcdc30a8eb251c482f9856fb70de7_r"></p>
+<p>但是仔细观察，我们会发现 <code>%temp</code> 和 <code>%i</code> 被多次赋值了，这并不合法。</p>
+<h3 id="phi指令"><a href="#phi指令" class="headerlink" title="phi指令"></a><code>phi</code>指令</h3><p><code>phi</code> 指令的语法是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; = phi &lt;ty&gt; [&lt;val0&gt;, &lt;label0&gt;], [&lt;val1&gt;, &lt;label1&gt;] ...</span><br></pre></td></tr></table></figure>
+
+<p>这个指令能够根据进入当前基本块之前执行的是哪一个基本块的代码来选择一个变量的值。</p>
+<p>比如下面这个例子：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">%4</span> <span class="operator">=</span> <span class="keyword">phi</span> <span class="type">i32</span> [ <span class="number">1</span><span class="punctuation">,</span> <span class="variable">%1</span> ]<span class="punctuation">,</span> [ <span class="variable">%8</span><span class="punctuation">,</span> <span class="variable">%5</span> ] <span class="comment">; 如果是从块 %1 来的，那么 %4 的值就是 1，如果是从块 %5 来的，那么 %4 的值就是 %8 的值</span></span><br></pre></td></tr></table></figure>
+
+<p>有了 <code>phi</code> 以后我们的代码就变成了</p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092207541.jpg" alt="v2-40c93aafeca39f560d0d555d8a264f54_1440w"></p>
+<p>这样的话，每个变量就只被赋值一次，并且实现了循环递增的效果。</p>
+<blockquote>
+<p>在这里你也可以发现：SSA 要求的是在<strong>静态</strong>，即仅从代码文本层面可以看出的单一赋值，而非运行时只会被赋值一次。</p>
+</blockquote>
+<h3 id="alloca、load-与-store"><a href="#alloca、load-与-store" class="headerlink" title="alloca、load 与 store"></a><code>alloca</code>、<code>load</code> 与 <code>store</code></h3><p><code>alloca</code> 指令的作用是在当前执行的函数的栈帧上分配内存并返回一个指向这片内存的指针，当函数返回时内存会被自动释放（一般是改变栈指针）。</p>
+<p>不难看出，这里的 <code>.ll</code> 文件所展示的 IR 中对一些局部变量存在多次 <code>store</code> 操作，但这些局部变量都是存放在内存中的，而非直接作为 LLVM IR 的一个虚拟寄存器被赋值。实际上，这是借助 LLVM IR 中只要求虚拟寄存器是 SSA 形式，而内存不要求是 SSA 形式的特点开了个后门来妥协，前端可以直接把局部变量分配到内存当中，放在内存里的变量不需要遵循 SSA 形式，可以经受多次定义。构造 SSA 的算法比较复杂，而且需要各种复杂的数据结构，这些因素导致在前端直接生成 SSA 形式的 IR 时非常麻烦。</p>
+<p>基于上述的 trick，前端能够直接将变量按照栈的方式分配到内存当中，并且这个内存里的变量不需要遵循 SSA 形式，可以被多次定义，从而避免了构造 <code>phi</code> 指令产生的大量开销。</p>
+<p>在 LLVM 中，所有的内存访问都需要显式地调用 <code>load/store</code> 指令。要说明的是，LLVM 中并没有给出“取地址”的操作符。以上面生成的代码中的 <code>%3</code> 为例，我们能在这些地方发现它</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">entry:</span></span><br><span class="line">    <span class="variable">%3</span> <span class="operator">=</span> <span class="keyword">alloca</span> <span class="type">i32</span><span class="punctuation">,</span> <span class="keyword">align</span> <span class="number">4</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="number">9</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="variable">%11</span> <span class="operator">=</span> <span class="keyword">load</span> <span class="type">i32</span><span class="punctuation">,</span> <span class="type">i32</span>* <span class="variable">%3</span><span class="punctuation">,</span> <span class="keyword">align</span> <span class="number">4</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">store</span> <span class="type">i32</span> <span class="variable">%12</span><span class="punctuation">,</span> <span class="type">i32</span>* <span class="variable">%3</span><span class="punctuation">,</span> <span class="keyword">align</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+<p>变量 <code>%3</code> 通过 <code>alloca</code> 声明，分配了一个 <code>i32</code> 大小的空间，这里 <code>%3</code> 的类型为 <code>i32*</code>，也就是说，<code>%3</code> 代表的是这段空间的地址，<code>load</code> 将 <code>%3</code> 所指向空间的内容读取出来，而 <code>store</code> 将新的值写入 <code>%3</code> 指向的空间。<code>alloca</code> 分配的栈变量可以进行多次存取，因此，通过 <code>alloca</code>、<code>load</code> 和 <code>store</code>，我们避免了 <code>phi</code> 指令的使用。</p>
+<p>这种生成存取内存的 LLVM IR 的方法有四个特点：</p>
+<ol>
+<li>每个可变变量都变为了栈上分配的空间（每个变量都变成了一条 <code>alloca</code> 指令）</li>
+<li>每次对变量的读都变成了从内存空间中的一次读（每次读取一个变量都变成了通过 <code>load</code> 对变量所在内存的读）</li>
+<li>每次对变量的写都变成了对内存的一次写（每次更新一个变量的值都变成了通过 <code>store</code> 对变量所在内存的写）</li>
+<li>获取变量的地址等价于获取内存的地址</li>
+</ol>
+<h3 id="做总结"><a href="#做总结" class="headerlink" title="做总结"></a>做总结</h3><p>不难发现，使用存取内存形式的 IR 的形式虽然避免了 <code>phi</code> 的出现，但是每次变量的存取都变成了访问内存，这会导致严重的性能问题。所幸，正如我们之前所说的，LLVM 提供了一个叫做 <code>mem2reg</code> 的解决方案，它能够把 <code>alloca</code> 指令分配的内存变量转化为 SSA 形式的 LLVM IR 虚拟寄存器变量，并且在合适的地方插入 <code>phi</code> 指令。</p>
+<p>当然，真正实现的时候可以选择存取内存形式的 IR，因为实现起来简单方便<del>，还有写 LLVM IR 不需要做代码优化，只有完成了 MIPS 才需要考虑代码优化，但是我不会把<code>phi</code>指令转 MIPS 汇编</del>。</p>
+<h2 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h2><p>接下来介绍在我的 LLVM IR 里涉及的类型。</p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092225079.png" alt="截屏2022-12-09 22.24.35"></p>
+<h3 id="Label-Type"><a href="#Label-Type" class="headerlink" title="Label Type"></a>Label Type</h3><p>标签类型，用作代码标签，比如</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">br</span> <span class="type">i1</span> <span class="variable">%9</span><span class="punctuation">,</span> label <span class="variable">%10</span><span class="punctuation">,</span> label <span class="variable">%11</span></span><br><span class="line"><span class="keyword">br</span> label <span class="variable">%12</span></span><br></pre></td></tr></table></figure>
+
+<p>但是计院评测机仍然使用的是 llvm-6.0，所以每一个基本块的 label 需要写成<code>;&lt;label&gt;:0:</code>、<code>;&lt;label&gt;:1:</code> … 的形式，其他地方不需要修改。</p>
+<h3 id="Integer-Type"><a href="#Integer-Type" class="headerlink" title="Integer Type"></a>Integer Type</h3><p>最简单的类型，代表了后面数字决定的位宽的类型，比如<code>i1</code>代表的就是<code>1bit</code>长的 integer（可以看作是 <code>bool</code>），<code>i8</code>就代表<code>8bit</code>长的 integer（可以看作是 <code>char</code>），<code>i32</code>就是<code>32bit</code>长的 integer, 在实验涉及内容里，如果字符串使用单个字符输出，只需要<code>i1</code>和<code>i32</code>类型；如果使用字符串输出，还需要<code>i8</code>类型。</p>
+<h3 id="Array-Type"><a href="#Array-Type" class="headerlink" title="Array Type"></a>Array Type</h3><p>顾名思义，数组类型。</p>
+<p>需要保留的信息包括：数组的元素类型，数组的长度。</p>
+<p>对于高维数组（n 维数组）来说，存储的元素类型就是其下一维数组（n - 1 维数组）。</p>
+<h3 id="Pointer-Type"><a href="#Pointer-Type" class="headerlink" title="Pointer Type"></a>Pointer Type</h3><p>指针类型，就是你懂的那个指针类型。</p>
+<p>需要保留的信息当然是指向的元素的类型。</p>
+<h3 id="Void-Type"><a href="#Void-Type" class="headerlink" title="Void Type"></a>Void Type</h3><p>仅占位用，不代表任何值也不占任何空间。</p>
+<h3 id="Function-Type"><a href="#Function-Type" class="headerlink" title="Function Type"></a>Function Type</h3><p>函数类型。</p>
+<p>需要保留的信息包括函数的参数类型列表，以及函数的返回值类型。</p>
+<h2 id="可能会用到的-LLVM-IR-指令"><a href="#可能会用到的-LLVM-IR-指令" class="headerlink" title="可能会用到的 LLVM IR 指令"></a>可能会用到的 LLVM IR 指令</h2><h3 id="instructions"><a href="#instructions" class="headerlink" title="instructions"></a>instructions</h3><table>
+<thead>
+<tr>
+<th>llvm ir</th>
+<th>usage</th>
+<th>intro</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add</td>
+<td><code>&lt;result&gt; = add &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>/</td>
+</tr>
+<tr>
+<td>sub</td>
+<td><code>&lt;result&gt; = sub &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>/</td>
+</tr>
+<tr>
+<td>mul</td>
+<td><code>&lt;result&gt; = mul &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>/</td>
+</tr>
+<tr>
+<td>sdiv</td>
+<td><code>&lt;result&gt; = sdiv &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>有符号除法</td>
+</tr>
+<tr>
+<td>icmp</td>
+<td><code>&lt;result&gt; = icmp &lt;cond&gt; &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>比较指令</td>
+</tr>
+<tr>
+<td>and</td>
+<td><code>&lt;result&gt; = and &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>与</td>
+</tr>
+<tr>
+<td>or</td>
+<td><code>&lt;result&gt; = or &lt;ty&gt; &lt;op1&gt;, &lt;op2&gt;</code></td>
+<td>或</td>
+</tr>
+<tr>
+<td>call</td>
+<td><code>&lt;result&gt; = call [ret attrs] &lt;ty&gt; &lt;fnptrval&gt;(&lt;function args&gt;)</code></td>
+<td>函数调用</td>
+</tr>
+<tr>
+<td>alloca</td>
+<td><code>&lt;result&gt; = alloca &lt;type&gt;</code></td>
+<td>分配内存</td>
+</tr>
+<tr>
+<td>load</td>
+<td><code>&lt;result&gt; = load &lt;ty&gt;, &lt;ty&gt;* &lt;pointer&gt;</code></td>
+<td>读取内存</td>
+</tr>
+<tr>
+<td>store</td>
+<td><code>store &lt;ty&gt; &lt;value&gt;, &lt;ty&gt;* &lt;pointer&gt;</code></td>
+<td>写内存</td>
+</tr>
+<tr>
+<td>getelementptr</td>
+<td><code>&lt;result&gt; = getelementptr &lt;ty&gt;, * &#123;, [inrange] &lt;ty&gt; &lt;idx&gt;&#125;*</code> <code>&lt;result&gt; = getelementptr inbounds &lt;ty&gt;, &lt;ty&gt;* &lt;ptrval&gt;&#123;, [inrange] &lt;ty&gt; &lt;idx&gt;&#125;*</code></td>
+<td>计算目标元素的位置（仅计算）</td>
+</tr>
+<tr>
+<td>phi</td>
+<td><code>&lt;result&gt; = phi [fast-math-flags] &lt;ty&gt; [ &lt;val0&gt;, &lt;label0&gt;], ...</code></td>
+<td>在 SSA 时需要考虑的</td>
+</tr>
+<tr>
+<td>zext..to</td>
+<td><code>&lt;result&gt; = zext &lt;ty&gt; &lt;value&gt; to &lt;ty2&gt;</code></td>
+<td>类型转换，将 <code>ty</code>的<code>value</code>的type转换为<code>ty2</code></td>
+</tr>
+</tbody></table>
+<h3 id="terminator-insts"><a href="#terminator-insts" class="headerlink" title="terminator insts"></a>terminator insts</h3><table>
+<thead>
+<tr>
+<th>llvm ir</th>
+<th>usage</th>
+<th>intro</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>br</td>
+<td><code>br i1 &lt;cond&gt;, label &lt;iftrue&gt;, label &lt;iffalse&gt;</code> <code>br label &lt;dest&gt;</code></td>
+<td>改变控制流</td>
+</tr>
+<tr>
+<td>ret</td>
+<td><code>ret &lt;type&gt; &lt;value&gt;</code> ,<code>ret void</code></td>
+<td>退出当前函数，并返回值（可选）</td>
+</tr>
+</tbody></table>
+<p>我在 LLVM IR 当中，给每条指令都写了一个类（Binary 指的是诸如 add sub mul 这样的二元指令），为了方便我对每种类型的指令进行管理和输出。</p>
+<p><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212092224263.png" alt="截屏2022-12-09 22.23.17"></p>
+<h2 id="我的-LLVMGenerator"><a href="#我的-LLVMGenerator" class="headerlink" title="我的 LLVMGenerator"></a>我的 LLVMGenerator</h2><p>有了前面对 LLVM IR 的初步了解，以及已经完成 LLVM IR 的各项指令类接下来要做的应该是遍历语法树生成中间代码。</p>
+<h3 id="BuildFactory"><a href="#BuildFactory" class="headerlink" title="BuildFactory"></a>BuildFactory</h3><p>但在这之前，为了简化遍历语法树所需要进行的操作细节，首先看 BuildFactory，在这个类里完成所有的创建 Value 相关的操作，比如</p>
+<ul>
+<li><p>创建一个函数：<code>buildFunction()</code>、<code>getFunctionType()</code></p>
+</li>
+<li><p>创建一个变量：<code>buildGlobalVar()</code>、<code>buildVar()</code></p>
+</li>
+<li><p>创建一个数组：<code>buildGlobalArray()</code>、<code>buildArray()</code>、<code>buildInitArray()</code></p>
+</li>
+<li><p>创建一条指令：<code>buildBinary()</code>、<code>buildLoad()</code>、<code>buildStore()</code>、<code>buildBr()</code></p>
+</li>
+</ul>
+<p>当然上面只是举几个例子，具体的内容还有更多，这些函数都在 BuildFactory 当中完成实现细节。</p>
+<p>例如创建一个变量<code>buildVar()</code>（使用存取内存形式的 IR 的形式，即<code>alloca</code>、<code>load</code> 与 <code>store</code>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> AllocaInst <span class="title function_">buildVar</span><span class="params">(BasicBlock basicBlock, Value value, <span class="type">boolean</span> isConst, Type allocaType)</span> &#123;</span><br><span class="line">    <span class="type">AllocaInst</span> <span class="variable">tmp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AllocaInst</span>(basicBlock, isConst, allocaType);</span><br><span class="line">    tmp.addInstToBlock(basicBlock);</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="literal">null</span>) &#123;</span><br><span class="line">        buildStore(basicBlock, tmp, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就是先在 BasicBlock 当中创建一个 <code>alloca</code> 指令，然后如果有初值就把值 <code>store</code> 进去，然后将得到的指令 <code>return</code> 回去。</p>
+<p>使用 BuildFactory 是我为了在 LLVMGenerator 当中只处理遍历语法树相关操作，避免同时思考创建一个 Value 的操作细节，也可以减少 LLVMGenerator 文件的长度<del>，纯纯是我脑子不够用</del>。</p>
+<h3 id="LLVMGenerator"><a href="#LLVMGenerator" class="headerlink" title="LLVMGenerator"></a>LLVMGenerator</h3><p>回到 LLVMGenerator，在这个阶段由于使用了 LLVM IR，所以换了一套符号表系统，错误处理的便不再使用，考虑到经历了错误处理之后走到这一步的源代码肯定是正确的，在这个符号表当中只保留了 Map，即</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> List&lt;Pair&lt;Map&lt;String, Value&gt;, Map&lt;String, Integer&gt;&gt;&gt; symbolTable;</span><br></pre></td></tr></table></figure>
+
+<p>这是符号表和常量表结合使用的。常量表是为了方便、快速获取常量的值进行计算的，因为<code>&lt;ConstExp&gt;</code>的值需要在编译时就能计算出来，那就干脆把计算的值也给保留下来了。</p>
+<p>这两张表和之前错误处理的时候的那张符号表使用方法类似，此处便不再赘述。</p>
+<p>接下来就是递归下降遍历语法树的环节。在遍历语法树的时候需要保留和传递很多变量的值（Value）以及保留一些现场等，我在实现的时候很多的使用了全局变量来实现值在不同函数之间的传递，这里列出来了我 LLVMGenerator 当中的全局变量，仅供参考。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">BasicBlock</span> <span class="variable">curBlock</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">BasicBlock</span> <span class="variable">curTrueBlock</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">BasicBlock</span> <span class="variable">curFalseBlock</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">BasicBlock</span> <span class="variable">continueBlock</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">BasicBlock</span> <span class="variable">curWhileFinalBlock</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">Function</span> <span class="variable">curFunction</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 计算时需要保留的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Integer</span> <span class="variable">saveValue</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">Operator</span> <span class="variable">saveOp</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">tmpIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">Operator</span> <span class="variable">tmpOp</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">Type</span> <span class="variable">tmpType</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">Value</span> <span class="variable">tmpValue</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> List&lt;Value&gt; tmpList = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> List&lt;Type&gt; tmpTypeList = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> List&lt;Value&gt; funcArgsList = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="variable">isGlobal</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="variable">isConst</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="variable">isArray</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="variable">isRegister</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 数组相关</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Value</span> <span class="variable">curArray</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">String</span> <span class="variable">tmpName</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">tmpDepth</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">tmpOffset</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">private</span> List&lt;Integer&gt; tmpDims = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>前面该做的准备都做了，遍历语法树相信相信大家也不陌生，此处也就不再赘述了，只要注意全局变量在递归下降函数过程中会发生值的变化的地方就可以，然后还有注意一些控制相关的<code>isGlobal</code>等会对这些保留的值产生什么影响。</p>
+<p>拿我的访问常量定义的<code>visitConstDef()</code>函数来说，具体代码如下（当然仅供参考）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">visitConstDef</span><span class="params">(ConstDefNode constDefNode)</span> &#123;</span><br><span class="line">    <span class="comment">// ConstDef -&gt; Ident &#123; &#x27;[&#x27; ConstExp &#x27;]&#x27; &#125; &#x27;=&#x27; ConstInitVal</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> constDefNode.getIdent().getContent(); <span class="comment">// 常量名称</span></span><br><span class="line">    <span class="keyword">if</span> (constDefNode.getConstExpNodes().isEmpty()) &#123; <span class="comment">// 判断是否是数组</span></span><br><span class="line">        <span class="comment">// 不是数组</span></span><br><span class="line">        visitConstInitVal(constDefNode.getConstInitValNode()); <span class="comment">// 先访问 ConstInitVal 得到初始值</span></span><br><span class="line">        tmpValue = buildFactory.getConstInt(saveValue == <span class="literal">null</span> ? <span class="number">0</span> : saveValue); <span class="comment">// 得到具体的数字</span></span><br><span class="line">        addConst(name, saveValue); <span class="comment">// 常量添加到常量表</span></span><br><span class="line">        <span class="keyword">if</span> (isGlobal) &#123; <span class="comment">// 如果是全局变量</span></span><br><span class="line">            tmpValue = buildFactory.buildGlobalVar(name, tmpType, <span class="literal">true</span>, tmpValue); <span class="comment">// 创建一个全局变量</span></span><br><span class="line">            addSymbol(name, tmpValue); <span class="comment">// 放到符号表</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// 如果不是全局变量</span></span><br><span class="line">            tmpValue = buildFactory.buildVar(curBlock, tmpValue, <span class="literal">true</span>, tmpType); <span class="comment">// 创建一个局部变量</span></span><br><span class="line">            addSymbol(name, tmpValue); <span class="comment">// 放到符号表</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 是数组</span></span><br><span class="line">        List&lt;Integer&gt; dims = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(); <span class="comment">// 维数</span></span><br><span class="line">        <span class="keyword">for</span> (ConstExpNode constExpNode : constDefNode.getConstExpNodes()) &#123; <span class="comment">// 先访问 ConstExp 得到每一维长度</span></span><br><span class="line">            visitConstExp(constExpNode); <span class="comment">// 访问每一维</span></span><br><span class="line">            dims.add(saveValue); <span class="comment">// 加到维数列表</span></span><br><span class="line">        &#125;</span><br><span class="line">        tmpDims = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(dims); <span class="comment">// 维数</span></span><br><span class="line">        <span class="type">Type</span> <span class="variable">type</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 初始化数组类型</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> dims.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123; <span class="comment">// 遍历维数</span></span><br><span class="line">            <span class="keyword">if</span> (type == <span class="literal">null</span>) &#123; <span class="comment">// 第一个</span></span><br><span class="line">                type = buildFactory.getArrayType(tmpType, dims.get(i)); <span class="comment">// 使用 tmpType 的值</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 否则</span></span><br><span class="line">                type = buildFactory.getArrayType(type, dims.get(i));</span><br><span class="line">                <span class="comment">// 高维数组（n 维数组）存储的元素类型就是其下一维数组（n - 1 维数组）</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (isGlobal) &#123; <span class="comment">// 如果是全局变量</span></span><br><span class="line">            tmpValue = buildFactory.buildGlobalArray(name, type, <span class="literal">true</span>); <span class="comment">// 创建一个全局数组</span></span><br><span class="line">            ((ConstArray) ((GlobalVar) tmpValue).getValue()).setInit(<span class="literal">true</span>); <span class="comment">// 标记有初始化</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            tmpValue = buildFactory.buildArray(curBlock, <span class="literal">true</span>, type); <span class="comment">// 创建一个局部数组</span></span><br><span class="line">        &#125;</span><br><span class="line">        addSymbol(name, tmpValue); <span class="comment">// 添加到符号表</span></span><br><span class="line">        curArray = tmpValue; <span class="comment">// 当前的数组就是现在的 tmpValue</span></span><br><span class="line">        isArray = <span class="literal">true</span>; <span class="comment">// 表示接下来要遍历的是数组</span></span><br><span class="line">        tmpName = name; <span class="comment">// 存一下数组的名字</span></span><br><span class="line">        tmpDepth = <span class="number">0</span>; <span class="comment">// 初始化深度</span></span><br><span class="line">        tmpOffset = <span class="number">0</span>; <span class="comment">// 初始化偏移量</span></span><br><span class="line">        visitConstInitVal(constDefNode.getConstInitValNode()); <span class="comment">// 访问 ConstInitVal</span></span><br><span class="line">        isArray = <span class="literal">false</span>; <span class="comment">// 取消数组标记</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>得时刻清晰调用函数递归下降的时候会对这些全局变量造成什么影响，以及改变的值接下来怎么用。</p>
+<p>其他的具体的函数实现步骤和实现细节，直接参考软院的 LLVM IR 教程就可以了，在这里就不说了。</p>
+<h2 id="LLVM-转-MIPS"><a href="#LLVM-转-MIPS" class="headerlink" title="LLVM 转 MIPS"></a>LLVM 转 MIPS</h2><p>由于这部分可以参考的内容实在是太少，相比于中间有设计有考虑的 LLVM IR 显得有点虎头蛇尾。整个后端就只有一个文件，所有的操作全部都在栈上（x</p>
+<p>这一部分其实就是按部就班对每条中间代码进行翻译即可。</p>
+<p>基本所有的指令都是先在栈上读，然后处理，然后写回栈上。</p>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><p>先对全局变量在 .data 段进行声明，主要考虑全局变量、全局数组、字符串常量三个部分。</p>
+<p>然后处理 .text 段，.text 段第一句直接 jal main，后面紧跟结束程序的 li $v0, 10 和 syscall 两句。</p>
+<p>然后开始处理每个函数的每个基本块的每条指令即可。</p>
+<p>整体流程如下所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">genMips</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// .data</span></span><br><span class="line">    <span class="keyword">for</span> ( 全局变量 ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( 字符串 ) &#123;</span><br><span class="line">            ... <span class="comment">// .asciiz</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( 全局变量 ) &#123;</span><br><span class="line">            ... <span class="comment">// .word</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( 全局数组 ) &#123;</span><br><span class="line">            ... <span class="comment">// 全局数组有初值就用 .word 把每个初值全列出来，没有的话就直接 .space 空间大小即可</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> ( 函数 ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( 是 IO 库函数 ) &#123;</span><br><span class="line">            <span class="comment">// syscall</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// .text</span></span><br><span class="line">    <span class="comment">// jal main</span></span><br><span class="line">    <span class="comment">// li $v0, 10</span></span><br><span class="line">    <span class="comment">// syscall</span></span><br><span class="line">    <span class="keyword">for</span> ( 函数 ) &#123;</span><br><span class="line">        ... <span class="comment">// 不需要再考虑 IO 库函数</span></span><br><span class="line">        <span class="comment">// function name:</span></span><br><span class="line">        <span class="comment">// 每个函数分配空间</span></span><br><span class="line">        <span class="keyword">for</span> ( 基本块 ) &#123;</span><br><span class="line">            <span class="comment">// basic block name:</span></span><br><span class="line">            <span class="keyword">for</span> ( 指令 ) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!(ir <span class="keyword">instanceof</span> AllocaInst)) &#123;</span><br><span class="line">                    <span class="comment">// 给每条指令一个栈的位置（alloca 除外）</span></span><br><span class="line">                &#125;</span><br><span class="line">                translate(ir); <span class="comment">// 翻译每条指令</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="翻译每条指令"><a href="#翻译每条指令" class="headerlink" title="翻译每条指令"></a>翻译每条指令</h3><p>就按部就班翻译即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">translate</span><span class="params">(Instruction ir)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> BinaryInst) parseBinary((BinaryInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> CallInst) parseCall((CallInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> RetInst) parseRet((RetInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> AllocaInst) parseAlloca((AllocaInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> LoadInst) parseLoad((LoadInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> StoreInst) parseStore((StoreInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> GEPInst) parseGEP((GEPInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> BrInst) parseBr((BrInst) ir);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ir <span class="keyword">instanceof</span> ConvInst) parseConv((ConvInst) ir);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Binary</p>
+<p>就是 load 两个操作数，计算结果，然后 store 回这条指令的位置</p>
+</li>
+<li><p>Call</p>
+<p>要分清楚 Call 的是不是 IO 库函数。</p>
+<p>如果是的话，需要使用相应的 syscall 语句；如果不是，需要对栈指针进行移动，然后 jal 这个函数，注意当函数返回来的时候，需要恢复现场。</p>
+</li>
+<li><p>Return</p>
+<p>有返回值就把返回值存到 $v0，没有的话就不用管，然后直接 jr $ra 即可。</p>
+</li>
+<li><p>Alloca</p>
+<p>由于 LLVM IR 当中 alloca 的有可能是 PointerType、IntegerType、ArrayType，只需要分别对这三种情况进行讨论就可以了。</p>
+</li>
+<li><p>Load 和 Store</p>
+<p>这两个比较类似，但是都需要考虑是不是对 getelementptr 的结果进行操作，比如 load getelementptr 的结果或者是把 getelementptr 的结果 store 起来。因为 getelementptr 仅仅是计算地址，真正的操作的话还需要多一小步。</p>
+</li>
+<li><p>getelementptr</p>
+<p>这个就比较复杂。</p>
+<p>如果是字符串那好说，直接 la $a0, 加上字符串的名字即可，因为下一条 LLVM IR 指令必然是 call putstr，直接输出就可以；</p>
+<p>否则，就需要计算偏移量，偏移量是常量还是变量需要分开来考虑。</p>
+</li>
+<li><p>Br</p>
+<p>只需要分一下是有条件跳转还是无条件跳转即可。</p>
+</li>
+<li><p>Conv（Zext）</p>
+<p>我们的编译器用的 Zext 就是零扩展指令，将一种类型的变量拓展为另一种类型的变量，高位补 0。在我们的编译器就是 1bit 变成 32bit 高位补 0，所以直接 load 出来然后直接 store 即可，不需要做其他的操作。</p>
+</li>
+</ul>
+<p>至此，我们的代码生成部分也就结束了，完成了遍历语法树生成可以运行的 LLVM IR 程序，然后完成了将 LLVM IR 代码翻译成可以运行的 MIPS 汇编代码。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/hjc-owo">花开一季 叶落一地</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://hjc-owo.github.io/2022/12/21/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/">http://hjc-owo.github.io/2022/12/21/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/compiler/">compiler</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212211802894.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/10/22/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/"><img class="next-cover" src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202210221026349.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">错误处理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/09/14/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" title="词法分析"><img class="cover" src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202209142352727.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-14</div><div class="title">词法分析</div></div></a></div><div><a href="/2022/09/26/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" title="语法分析"><img class="cover" src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202209261318355.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-26</div><div class="title">语法分析</div></div></a></div><div><a href="/2022/10/22/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="错误处理"><img class="cover" src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202210221026349.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-22</div><div class="title">错误处理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202209142352029.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">花叶小姐姐</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/hjc-owo"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">无人相陪，此般花鸟余情，也不过衬托我身不移不变的背景罢了。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E8%AE%BE%E8%AE%A1"><span class="toc-text">代码生成设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E7%BB%BC%E8%BF%B0"><span class="toc-text">代码生成综述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LLVM-IR-%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">LLVM IR 的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E4%BD%93%E7%BB%93%E6%9E%84"><span class="toc-text">总体结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%A3%B0%E6%98%8E"><span class="toc-text">函数定义与声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%9D%97%EF%BC%88Basic-Block%EF%BC%89"><span class="toc-text">基本块（Basic Block）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%EF%BC%88Instruction%EF%BC%89"><span class="toc-text">指令（Instruction）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%88%E7%BB%93%E6%8C%87%E4%BB%A4%EF%BC%88Terminator-instruction%EF%BC%89"><span class="toc-text">终结指令（Terminator instruction）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%88%87%E7%9A%86-Value"><span class="toc-text">一切皆 Value</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84-LLVM-IR-%E7%BB%93%E6%9E%84"><span class="toc-text">我的 LLVM IR 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LLVM-%E4%B8%AD%E7%9A%84-SSA"><span class="toc-text">LLVM 中的 SSA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSA-%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-text">SSA 的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSA-%E9%9C%80%E8%A6%81%E6%80%9D%E8%80%83%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">SSA 需要思考的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phi%E6%8C%87%E4%BB%A4"><span class="toc-text">phi指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#alloca%E3%80%81load-%E4%B8%8E-store"><span class="toc-text">alloca、load 与 store</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9A%E6%80%BB%E7%BB%93"><span class="toc-text">做总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F"><span class="toc-text">类型系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Label-Type"><span class="toc-text">Label Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Integer-Type"><span class="toc-text">Integer Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Array-Type"><span class="toc-text">Array Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pointer-Type"><span class="toc-text">Pointer Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Void-Type"><span class="toc-text">Void Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Type"><span class="toc-text">Function Type</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E4%BC%9A%E7%94%A8%E5%88%B0%E7%9A%84-LLVM-IR-%E6%8C%87%E4%BB%A4"><span class="toc-text">可能会用到的 LLVM IR 指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#instructions"><span class="toc-text">instructions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#terminator-insts"><span class="toc-text">terminator insts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84-LLVMGenerator"><span class="toc-text">我的 LLVMGenerator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BuildFactory"><span class="toc-text">BuildFactory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LLVMGenerator"><span class="toc-text">LLVMGenerator</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LLVM-%E8%BD%AC-MIPS"><span class="toc-text">LLVM 转 MIPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-text">整体流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BF%BB%E8%AF%91%E6%AF%8F%E6%9D%A1%E6%8C%87%E4%BB%A4"><span class="toc-text">翻译每条指令</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/12/21/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" title="代码生成"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202212211802894.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码生成"/></a><div class="content"><a class="title" href="/2022/12/21/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" title="代码生成">代码生成</a><time datetime="2022-12-21T10:01:17.000Z" title="Created 2022-12-21 18:01:17">2022-12-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/22/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="错误处理"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202210221026349.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="错误处理"/></a><div class="content"><a class="title" href="/2022/10/22/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="错误处理">错误处理</a><time datetime="2022-10-21T16:52:53.000Z" title="Created 2022-10-22 00:52:53">2022-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/26/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" title="语法分析"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202209261318355.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="语法分析"/></a><div class="content"><a class="title" href="/2022/09/26/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" title="语法分析">语法分析</a><time datetime="2022-09-26T05:17:20.000Z" title="Created 2022-09-26 13:17:20">2022-09-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/14/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" title="词法分析"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202209142352727.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="词法分析"/></a><div class="content"><a class="title" href="/2022/09/14/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" title="词法分析">词法分析</a><time datetime="2022-09-14T15:51:34.000Z" title="Created 2022-09-14 23:51:34">2022-09-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/07/my-first-post/" title="我的第一篇博客"><img src="https://raw.githubusercontent.com/hjc-owo/hjc-owo.github.io/img/202205062025714.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我的第一篇博客"/></a><div class="content"><a class="title" href="/2022/05/07/my-first-post/" title="我的第一篇博客">我的第一篇博客</a><time datetime="2022-05-06T18:48:34.000Z" title="Created 2022-05-07 02:48:34">2022-05-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 花叶小姐姐</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
