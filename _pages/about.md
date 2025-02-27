@@ -120,12 +120,12 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 <!-- - _2021.10_ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. -->
 <!-- - _2021.09_ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. -->
 
-# 📖 Education
+# 📖 Educations
 
 - _2024.09 – Present_: **M.S. in Software Engineering**, School of Software, Beihang University  
 
 - _2019.09 – 2024.06_: **B.S. in Software Engineering**, School of Software, Beihang University  
-  - **GPA**: 3.9573 / 4.00  
+  - **GPA**: 3.95730 / 4.00
   - **Rank**: 4 / 187
 
 <!-- # 💬 Invited Talks -->
