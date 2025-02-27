@@ -38,8 +38,7 @@ I am a master student in Software Engineering at Beihang University, advised by 
 
 Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
 
-[![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-LLM4SVG-orange.svg)](https://ximinng.github.io/LLM4SVGProject/)
-[![](https://img.shields.io/github/stars/ximinng/LLM4SVG?style=social&label=Code+Stars)](https://github.com/ximinng/LLM4SVG)
+[![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-LLM4SVG-orange.svg)](https://ximinng.github.io/LLM4SVGProject/) [![](https://img.shields.io/github/stars/ximinng/LLM4SVG?style=social&label=Code+Stars)](https://github.com/ximinng/LLM4SVG)
 
 <b><u>TL;DR:</u></b> Unifying SVG generation and understanding via semantic tokens.
 
@@ -59,8 +58,7 @@ IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2025
 
 Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
-[![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-SVGFusion-orange.svg)](https://ximinng.github.io/SVGFusionProject/)
-[![](https://img.shields.io/github/stars/ximinng/SVGFusion?style=social&label=Code+Stars)](https://github.com/ximinng/SVGFusion)
+[![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-SVGFusion-orange.svg)](https://ximinng.github.io/SVGFusionProject/) [![](https://img.shields.io/github/stars/ximinng/SVGFusion?style=social&label=Code+Stars)](https://github.com/ximinng/SVGFusion)
 
 <b><u>TL;DR:</u></b> SVGFusion is a novel Text-to-SVG model that generates high-quality vector graphics by learning continuous latent space representations.
 
@@ -92,7 +90,7 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 <!-- project 1 -->
 <div class='paper-box'>
-<div class='paper-box-image'><div><div class="project-badge">open source</div><img src='images/PyTorch-SVGRender-cover.png' alt="PyTorch-SVGRender" width="100%"></div></div>
+<div class='paper-box-image'><div><div class="project-badge">open source</div><img src='images/covers/PyTorch-SVGRender.png' alt="PyTorch-SVGRender" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [Pytorch-SVGRender: A Differentiable Rendering Library for SVG Creation](https://ximinng.github.io/PyTorch-SVGRender-project/)
@@ -101,15 +99,9 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 <b><u>TL;DR:</u></b> SVG Differentiable Rendering: Generating vector graphics using neural networks. Support: text-to-SVG, Image-to-SVG, SVG Editing.
 
-<a href="https://ximinng.github.io/PyTorch-SVGRender-project/"><img src="https://img.shields.io/badge/Website-Gitpage-yellow" alt="website"></a>
-<a href="https://pytorch-svgrender.readthedocs.io/en/latest/index.html"><img src="https://img.shields.io/badge/DOCS-Readthedocs-purple?logo=readthedocs" alt="docs"></a>
-<a href="https://huggingface.co/SVGRender"><img src="https://img.shields.io/badge/SPACE-HuggingFace-ffcc00?logo=huggingface" alt="space"></a>
-[![](https://img.shields.io/github/stars/ximinng/PyTorch-SVGRender?style=social&label=Code+Stars)](https://github.com/ximinng/PyTorch-SVGRender)
+<a href="https://ximinng.github.io/PyTorch-SVGRender-project/"><img src="https://img.shields.io/badge/Website-Gitpage-yellow" alt="website"></a> <a href="https://pytorch-svgrender.readthedocs.io/en/latest/index.html"><img src="https://img.shields.io/badge/DOCS-Readthedocs-purple?logo=readthedocs" alt="docs"></a> <a href="https://huggingface.co/SVGRender"><img src="https://img.shields.io/badge/SPACE-HuggingFace-ffcc00?logo=huggingface" alt="space"></a> [![](https://img.shields.io/github/stars/ximinng/PyTorch-SVGRender?style=social&label=Code+Stars)](https://github.com/ximinng/PyTorch-SVGRender)
 
-🌐 [**Project**](https://ximinng.github.io/PyTorch-SVGRender-project/) |
-📁 [**Code**](https://github.com/ximinng/PyTorch-SVGRender) |
-🤗 [**HuggingFace**](https://huggingface.co/SVGRender) |
-📄 [**Docs**](https://pytorch-svgrender.readthedocs.io/en/latest/index.html)
+🌐 [**Project**](https://ximinng.github.io/PyTorch-SVGRender-project/) | 📁 [**Code**](https://github.com/ximinng/PyTorch-SVGRender) | 🤗 [**HuggingFace**](https://huggingface.co/SVGRender) | 📄 [**Docs**](https://pytorch-svgrender.readthedocs.io/en/latest/index.html)
 </div>
 </div>
 
