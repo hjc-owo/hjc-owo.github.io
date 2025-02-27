@@ -107,3 +107,28 @@ h1:before, .anchor:before {
     background-color: #00369f;
     font-size: .8em;
 }
+.project-badge {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: absolute;
+    margin-top: .5em;
+    margin-left: -.5em;
+    color: white;
+    background-color: #14cc7d;
+    font-size: .8em;
+}
+
+/* 新增链接样式 */
+a {
+    color: #0066cc;
+    /* 默认蓝色 */
+    text-decoration: none;
+    transition: color 0.3s ease;
+    /* 颜色渐变效果 */
+
+    &:hover {
+        color: #003366;
+        /* 鼠标悬停时的深蓝色 */
+        text-decoration: underline;
+    }
+}
