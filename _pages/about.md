@@ -94,7 +94,7 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 <!-- project 1 -->
 <div class='paper-box'>
-<div class='paper-box-image'><div><div class="project-badge">open source</div><img src='images/PyTorch-SVGRender-cover.png' alt="PyTorch-SVGRender" width="100%"></div></div>
+<div class='paper-box-image'><div><div class="project-badge">open source</div><img src='images/covers/PyTorch-SVGRender.png' alt="PyTorch-SVGRender" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [Pytorch-SVGRender: A Differentiable Rendering Library for SVG Creation](https://ximinng.github.io/PyTorch-SVGRender-project/)
@@ -136,4 +136,5 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 # 💻 Internships
 
 - _2024.01 - 2024.06_, [AISphere](https://aishiai.com/), China.
+
   Controllable video generation, Text/Image-to-video generation, video reconstruction using VAE.
