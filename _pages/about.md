@@ -82,10 +82,12 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-VectorPainter-orange.svg)](https://hjc-owo.github.io/VectorPainterProject/)
+[![](https://img.shields.io/github/stars/hjc-owo/VectorPainter?style=social&label=Code+Stars)](https://github.com/hjc-owo/VectorPainter)
 
 <b><u>TL;DR:</u></b> VectorPainter synthesizes text-guided vector graphics by imitating strokes.
 
-[**Project**](https://hjc-owo.github.io/VectorPainterProject/)
+[**Project**](https://hjc-owo.github.io/VectorPainterProject/) |
+[**Code**](https://github.com/hjc-owo/VectorPainter)
 
 </div>
 </div>
