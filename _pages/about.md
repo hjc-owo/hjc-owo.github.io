@@ -24,7 +24,8 @@ I am a master student in Software Engineering at Beihang University, advised by 
 
 # 🔥 News
 
-- _2025.02_: &nbsp;🎉🎉 Our paper [LLM4SVG](https://ximinng.github.io/LLM4SVGProject/) has been accepted by **CVPR2025!**
+- _2025.03_: &nbsp;🎉🎉 Our paper [VectorPainter](https://hjc-owo.github.io/VectorPainterProject/) has been accepted by **ICME 2025!**
+- _2025.02_: &nbsp;🎉🎉 Our paper [LLM4SVG](https://ximinng.github.io/LLM4SVGProject/) has been accepted by **CVPR 2025!**
 - _2023.12_: &nbsp;🎉🎉 We released [PyTorch-SVGRender](https://github.com/ximinng/PyTorch-SVGRender), a state-of-the-art library for differentiable SVG rendering in PyTorch.
 
 # 📝 Publications
@@ -73,7 +74,7 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 <!-- paper 1 -->
 <div class='paper-box'>
-<div class='paper-box-image'><div><div class="badge">arXiv 2024</div><img src='images/covers/vectorpainter.png' loading="lazy" alt="VectorPainter"></div></div>
+<div class='paper-box-image'><div><div class="badge">ICME 2025</div><img src='images/covers/vectorpainter.png' loading="lazy" alt="VectorPainter"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [VectorPainter: Advanced Stylized Vector Graphics Synthesis Using Stroke-Style Priors](https://arxiv.org/abs/2405.02962)
