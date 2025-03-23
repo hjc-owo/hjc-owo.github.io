@@ -44,7 +44,7 @@ Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
 
 <b><u>TL;DR:</u></b> Unifying SVG generation and understanding via semantic tokens.
 
-IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2025
+IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025
 
 [**Project**](https://ximinng.github.io/LLM4SVGProject/) |
 [**Code**](https://github.com/ximinng/LLM4SVG)
@@ -85,6 +85,8 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 [![](https://img.shields.io/github/stars/hjc-owo/VectorPainter?style=social&label=Code+Stars)](https://github.com/hjc-owo/VectorPainter)
 
 <b><u>TL;DR:</u></b> VectorPainter synthesizes text-guided vector graphics by imitating strokes.
+
+2025 IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 
 [**Project**](https://hjc-owo.github.io/VectorPainterProject/) |
 [**Code**](https://github.com/hjc-owo/VectorPainter)
