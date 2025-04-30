@@ -26,7 +26,7 @@ I am a master student in Software Engineering at Beihang University, advised by 
 
 - _2025.03_: &nbsp;🎉🎉 Our paper [VectorPainter](https://hjc-owo.github.io/VectorPainterProject/) has been accepted by **ICME 2025!**
 - _2025.02_: &nbsp;🎉🎉 Our paper [LLM4SVG](https://ximinng.github.io/LLM4SVGProject/) has been accepted by **CVPR 2025!**
-- _2023.12_: &nbsp;🎉🎉 We released [PyTorch-SVGRender](https://github.com/ximinng/PyTorch-SVGRender), a state-of-the-art library for differentiable SVG rendering in PyTorch.
+- _2023.12_: &nbsp;🎉🎉 We released [PyTorch-SVGRender](https://ximinng.github.io/PyTorch-SVGRender-project/), a state-of-the-art library for differentiable SVG rendering in PyTorch.
 
 # 📝 Publications
 
