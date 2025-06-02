@@ -9,6 +9,7 @@
 title                    : "Juncheng Hu"
 description              : "Master student at BUAA (Beihang University). "
 repository               : "hjc-owo.github.io"
+url                      : "https://hjc-owo.github.io"  # 添加明确的URL
 google_scholar_stats_use_cdn : true
 
 # google analytics
@@ -138,6 +139,9 @@ sass:
 permalink: /:categories/:title/
 timezone: Asia/Shanghai # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+# Pagination (if needed in future)
+paginate: 10
+paginate_path: /page:num/
 
 # Plugins
 plugins:
@@ -146,6 +150,8 @@ plugins:
   - jekyll-gist
   - jekyll-feed
   - jekyll-redirect-from
+  - jekyll-seo-tag
+  
 # mimic GitHub Pages with --safe
 whitelist:
   - jekyll-paginate
@@ -154,10 +160,25 @@ whitelist:
   - jekyll-feed
   - jemoji
 
+# 站点地图设置
+sitemap:
+  file: "/sitemap.xml"
+  exclude:
+    - "/google_scholar_crawler/"
+    - "/docs/"
+
+# Feed设置
+feed:
+  path: atom.xml
 
 # HTML Compression
 # - http://jch.penibelst.de/
 compress_html:
   clippings: all
+  comments: ["<!-- ", " -->"]
+  endings: [html, head, body]
   ignore:
     envs: development
+  blanklines: false
+  profile: false
+  startings: [html, head, body]

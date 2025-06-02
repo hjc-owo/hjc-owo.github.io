@@ -23,5 +23,8 @@ group :jekyll_plugins do
   # gem "jekyll-archives"
   gem "jekyll-feed"
   gem 'jekyll-sitemap'
+  gem 'jekyll-seo-tag'
+  gem 'jekyll-redirect-from'
+  gem 'jekyll-paginate'
   gem 'hawkins'
 end

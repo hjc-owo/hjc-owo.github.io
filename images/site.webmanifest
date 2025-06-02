@@ -1,19 +1,27 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Juncheng Hu - Academic Portfolio",
+    "short_name": "Juncheng Hu",
+    "description": "Academic portfolio of Juncheng Hu, Master student at Beihang University",
     "icons": [
          {
-            "src": "/favicon-192.png",
-            "sizes": "192x192",
+            "src": "favicons/favicon-16.png",
+            "sizes": "16x16",
             "type": "image/png"
          },
          {
-            "src": "/favicon-512.png",
-            "sizes": "512x512",
+            "src": "favicons/favicon-32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+         },
+         {
+            "src": "favicons/favicon-180.png",
+            "sizes": "180x180",
             "type": "image/png"
          }
     ],
-    "theme_color": "#FFFFFF",
-    "background_color": "#FFFFFF",
-    "display": "standalone"
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "orientation": "portrait-primary"
  }

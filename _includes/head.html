@@ -1,19 +1,56 @@
-<meta charset="utf-8">
+<meta charset="utf-8" />
 
 {% include seo.html %}
 
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Performance optimization: DNS prefetch and resource preload -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="preconnect" href="https://raw.githubusercontent.com" />
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
 
+<!-- Preload critical fonts -->
+<link
+  rel="preload"
+  href="assets/fonts/academicons.eot"
+  as="font"
+  type="font/eot"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="assets/fonts/academicons.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
+
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Performance optimization: Modern JS feature detection -->
 <script>
-  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+  // Add connection type detection for optimization
+  if ("connection" in navigator) {
+    document.documentElement.className +=
+      " conn-" + navigator.connection.effectiveType;
+  }
 </script>
 
 <!-- For all browsers -->
-<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/main.css" />
+<!-- Critical CSS inlining hint -->
+<link
+  rel="preload"
+  href="assets/css/main.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
 
-<meta http-equiv="cleartype" content="on">
+<meta http-equiv="cleartype" content="on" />
 <head>
-  <base target="_blank">
+  <base target="_blank" />
 </head>

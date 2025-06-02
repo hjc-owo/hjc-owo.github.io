@@ -1,4 +1,28 @@
-<script src="assets/js/main.min.js"></script>
+<!-- Use defer to optimize script loading -->
+<script src="assets/js/main.min.js" defer></script>
 
-{% include analytics.html %}
+<!-- Conditional loading of analytics scripts -->
+{% if site.google_analytics_id and jekyll.environment == 'production' %} {%
+include analytics.html %} {% endif %}
+
+<!-- Delayed loading of Google Scholar stats -->
 {% include fetch_google_scholar_stats.html %}
+
+<!-- Service Worker registration (optional) -->
+<script>
+  if (
+    "serviceWorker" in navigator &&
+    "{{ jekyll.environment }}" === "production"
+  ) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(function (registration) {
+          console.log("SW registered: ", registration);
+        })
+        .catch(function (registrationError) {
+          console.log("SW registration failed: ", registrationError);
+        });
+    });
+  }
+</script>

@@ -1,23 +1,76 @@
-<link rel="icon" type="image/png" sizes="180x180" href="images/favicons/favicon-180.png">
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16.png">
-<link rel="manifest" href="images/site.webmanifest">
+<link
+  rel="icon"
+  type="image/png"
+  sizes="180x180"
+  href="images/favicons/favicon-180.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="images/favicons/favicon-32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="images/favicons/favicon-16.png"
+/>
+<link rel="manifest" href="images/site.webmanifest" />
 
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="msapplication-TileImage" content="images/mstile-144x144.png?v=M44lzPylqQ">
-<meta name="msapplication-config" content="images/browserconfig.xml?v=M44lzPylqQ">
-<meta name="theme-color" content="#ffffff">
-<link rel="stylesheet" href="assets/css/academicons.css"/>
+<meta name="msapplication-TileColor" content="#000000" />
+<meta
+  name="msapplication-TileImage"
+  content="images/mstile-144x144.png?v=M44lzPylqQ"
+/>
+<meta
+  name="msapplication-config"
+  content="images/browserconfig.xml?v=M44lzPylqQ"
+/>
+<meta name="theme-color" content="#ffffff" />
+<link rel="stylesheet" href="assets/css/academicons.css" />
 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
+<!-- Optimized MathJax configuration -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+      ],
+      processEscapes: true,
+      processEnvironments: true,
+      autoload: {
+        color: [],
+        colorV2: ["color"],
+      },
+      packages: { "[+]": ["noerrors"] },
+    },
+    options: {
+      ignoreHtmlClass: "tex2jax_ignore",
+      processHtmlClass: "tex2jax_process",
+      enableMenu: false,
+    },
+    loader: {
+      load: ["[tex]/noerrors"],
+    },
+    startup: {
+      ready: function () {
+        console.log("MathJax is loaded and ready");
+        MathJax.startup.defaultReady();
+      },
+    },
+  };
 </script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+<script
+  type="text/javascript"
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+></script>
 
 <!-- end custom head snippets -->

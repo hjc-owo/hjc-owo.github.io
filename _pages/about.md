@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Juncheng Hu"
+title: "Homepage"
 excerpt: ""
 author_profile: true
 redirect_from:
@@ -35,6 +35,7 @@ I am a master student in Software Engineering at Beihang University, advised by 
 <div class='paper-box-text' markdown="1">
 
 <!-- paper 3 -->
+
 [Empowering LLMs to Understand and Generate Complex Vector Graphics](https://arxiv.org/abs/2412.11102)
 
 Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
@@ -46,8 +47,8 @@ Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
 
 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025
 
-[**Project**](https://ximinng.github.io/LLM4SVGProject/) |
-[**Code**](https://github.com/ximinng/LLM4SVG)
+🌐 [**Project**](https://ximinng.github.io/LLM4SVGProject/) |
+📁 [**Code**](https://github.com/ximinng/LLM4SVG)
 
 </div>
 </div>
@@ -66,8 +67,8 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 <b><u>TL;DR:</u></b> SVGFusion is a novel Text-to-SVG model that generates high-quality vector graphics by learning continuous latent space representations.
 
-[**Project**](https://ximinng.github.io/SVGFusionProject/) |
-[**Code**](https://github.com/ximinng/SVGFusion)
+🌐 [**Project**](https://ximinng.github.io/SVGFusionProject/) |
+📁 [**Code**](https://github.com/ximinng/SVGFusion)
 
 </div>
 </div>
@@ -88,18 +89,17 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 2025 IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 
-[**Project**](https://hjc-owo.github.io/VectorPainterProject/) |
-[**Code**](https://github.com/hjc-owo/VectorPainter)
+🌐 [**Project**](https://hjc-owo.github.io/VectorPainterProject/) |
+📁 [**Code**](https://github.com/hjc-owo/VectorPainter)
 
 </div>
 </div>
 
 # 📒 Projects
 
-
 <!-- project 1 -->
 <div class='paper-box'>
-<div class='paper-box-image'><div><div class="project-badge">open source</div><img src='images/covers/PyTorch-SVGRender.png' alt="PyTorch-SVGRender" width="100%"></div></div>
+<div class='paper-box-image'><div><div class="project-badge">open source</div><img src='images/covers/PyTorch-SVGRender.png' alt="PyTorch-SVGRender" width="100%" loading="lazy"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [Pytorch-SVGRender: A Differentiable Rendering Library for SVG Creation](https://ximinng.github.io/PyTorch-SVGRender-project/)
@@ -117,6 +117,7 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 📁 [**Code**](https://github.com/ximinng/PyTorch-SVGRender) |
 🤗 [**HuggingFace**](https://huggingface.co/SVGRender) |
 📄 [**Docs**](https://pytorch-svgrender.readthedocs.io/en/latest/index.html)
+
 </div>
 </div>
 
@@ -127,9 +128,9 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 # 📖 Educations
 
-- _2024.09 – Present_: **M.S. in Software Engineering**, School of Software, Beihang University  
+- _2024.09 – Present_: **M.S. in Software Engineering**, School of Software, Beihang University
 
-- _2019.09 – 2024.06_: **B.S. in Software Engineering**, School of Software, Beihang University  
+- _2019.09 – 2024.06_: **B.S. in Software Engineering**, School of Software, Beihang University
   - **GPA**: 3.95730 / 4.00
   - **Rank**: 4 / 187
 

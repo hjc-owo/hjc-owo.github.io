@@ -42,49 +42,72 @@
 
 .paper-box {
     display: flex;
-    justify-content: left;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column;
     border-bottom: 1px #efefef solid;
-    padding: 2em 0 2em 0;
+    padding: 1.5em 0;
     
 
     .paper-box-image{
-        justify-content: center;
         display: flex;
+        justify-content: center;
         width: 100%;
-        order: 2;
+        margin-bottom: 1em;
+        
         img {
-            max-width: 400px;
-            box-shadow: 3px 3px 6px #888;
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
             object-fit: cover;
+            border-radius: 4px;
         }
     }
     
     .paper-box-text{
-        max-width: 100%;
-        order: 1;
+        width: 100%;
+        
+        h3, h4 {
+            margin-top: 0;
+        }
     }
     
-    @include breakpoint($medium) {
+    @include breakpoint($small) {
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 2em 0;
+        
         .paper-box-image{
-            justify-content: left;
-            min-width: 200px;
-            max-width: 40%;
-            order: 1;
+            flex: 0 0 35%;
+            margin-bottom: 0;
+            margin-right: 2em;
+            
+            img {
+                max-width: 100%;
+                min-width: 220px;
+            }
         }
         
         .paper-box-text{
-            justify-content: left;
-            padding-left: 2em;
-            max-width: 60%;
-            order: 2;
+            flex: 1;
+            min-width: 0;
         }
-
     }
 
-
+    @include breakpoint($medium) {
+        .paper-box-image{
+            flex: 0 0 40%;
+            
+            img {
+                max-width: 480px;
+            }
+        }
+        
+        .paper-box-text{
+            flex: 1;
+        }
+    }
 }
 
 $scroll_offset : 2em;
@@ -106,6 +129,8 @@ h1:before, .anchor:before {
     color: white;
     background-color: #00369f;
     font-size: .8em;
+    border-radius: 3px;
+    z-index: 1;
 }
 .project-badge {
     padding-left: 1rem;
@@ -116,19 +141,21 @@ h1:before, .anchor:before {
     color: white;
     background-color: #14cc7d;
     font-size: .8em;
+    border-radius: 3px;
+    z-index: 1;
 }
 
-/* 新增链接样式 */
+/* Additional link styles */
 a {
     color: #0066cc;
-    /* 默认蓝色 */
+    /* Default blue color */
     text-decoration: none;
     transition: color 0.3s ease;
-    /* 颜色渐变效果 */
+    /* Color transition effect */
 
     &:hover {
         color: #003366;
-        /* 鼠标悬停时的深蓝色 */
+        /* Dark blue on hover */
         text-decoration: underline;
     }
 }
