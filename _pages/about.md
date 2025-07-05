@@ -24,23 +24,46 @@ I am a master student in Software Engineering at Beihang University, advised by 
 
 # 🔥 News
 
+- _2025.07_: &nbsp;🎉🎉 Our paper [GroupSketch](https://hjc-owo.github.io/GroupSketchProject/) has been accepted by **ACM MM 2025!**
 - _2025.03_: &nbsp;🎉🎉 Our paper [VectorPainter](https://hjc-owo.github.io/VectorPainterProject/) has been accepted by **ICME 2025!**
 - _2025.02_: &nbsp;🎉🎉 Our paper [LLM4SVG](https://ximinng.github.io/LLM4SVGProject/) has been accepted by **CVPR 2025!**
 - _2023.12_: &nbsp;🎉🎉 We released [PyTorch-SVGRender](https://ximinng.github.io/PyTorch-SVGRender-project/), a state-of-the-art library for differentiable SVG rendering in PyTorch.
 
 # 📝 Publications
 
+<!-- paper 4 -->
+
+<div class='paper-box'>
+<div class='paper-box-image'><div><div class="badge">ACM MM 2025</div><img src='images/covers/groupsketch.png' loading="lazy" alt="GroupSketch"></div></div>
+<div class='paper-box-text' markdown="1">
+
+
+[Multi-Object Sketch Animation with Grouping and Motion Trajectory Priors](#)
+
+Guotao Liang, **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
+
+[![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-GroupSketch-orange.svg)](https://hjc-owo.github.io/GroupSketchProject/)
+
+<b><u>TL;DR:</u></b> GroupSketch synthesizes **multi-object sketch animations** with **grouping** and **motion trajectory** priors, enabling users to create complex animations with ease.
+
+ACM International Conference on Multimedia, 2025.
+
+🌐 [**Project**](https://hjc-owo.github.io/GroupSketchProject/)
+
+</div>
+</div>
+
+<!-- paper 3 -->
 <div class='paper-box'>
 <div class='paper-box-image'><div><div class="badge">CVPR 2025</div><img src='images/covers/llm4svg.png' loading="lazy" alt="LLM4SVG"></div></div>
 <div class='paper-box-text' markdown="1">
-
-<!-- paper 3 -->
 
 [Empowering LLMs to Understand and Generate Complex Vector Graphics](https://arxiv.org/abs/2412.11102)
 
 Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-LLM4SVG-orange.svg)](https://ximinng.github.io/LLM4SVGProject/)
+[![dataset](https://img.shields.io/badge/Dataset-SVGX_SFT_1M-ffcc00?logo=huggingface)](https://huggingface.co/datasets/xingxm/SVGX-SFT-1M)
 [![](https://img.shields.io/github/stars/ximinng/LLM4SVG?style=social&label=Code+Stars)](https://github.com/ximinng/LLM4SVG)
 
 <b><u>TL;DR:</u></b> LLM4SVG introduces learnable **SVG Semantic Tokens** and a large **SVGX-SFT dataset**, enabling LLMs to understand and generate complex vector graphics.
@@ -48,7 +71,8 @@ Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025
 
 🌐 [**Project**](https://ximinng.github.io/LLM4SVGProject/) |
-📁 [**Code**](https://github.com/ximinng/LLM4SVG)
+📁 [**Code**](https://github.com/ximinng/LLM4SVG) |
+🤗 [**SVGX-SFT-1M Dataset**](https://huggingface.co/datasets/xingxm/SVGX-SFT-1M)
 
 </div>
 </div>
@@ -63,12 +87,14 @@ IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025
 Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-SVGFusion-orange.svg)](https://ximinng.github.io/SVGFusionProject/)
+[![dataset](https://img.shields.io/badge/Dataset-SVGX_Core_250k-ffcc00?logo=huggingface)](https://huggingface.co/datasets/xingxm/SVGX-Core-250k)
 [![](https://img.shields.io/github/stars/ximinng/SVGFusion?style=social&label=Code+Stars)](https://github.com/ximinng/SVGFusion)
 
 <b><u>TL;DR:</u></b> SVGFusion improves text-to-SVG generation by using a **VP-VAE to learn a vector representation of SVG elements**, and a **VS-DiT** to generate SVGs from text prompts by performing diffusion within that **learned vector space**.
 
 🌐 [**Project**](https://ximinng.github.io/SVGFusionProject/) |
-📁 [**Code**](https://github.com/ximinng/SVGFusion)
+📁 [**Code**](https://github.com/ximinng/SVGFusion) ｜
+🤗 [**SVGX-Core-250k Dataset**](https://huggingface.co/datasets/xingxm/SVGX-Core-250k)
 
 </div>
 </div>
@@ -87,7 +113,7 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 
 <b><u>TL;DR:</u></b> VectorPainter synthesizes text-guided vector graphics by **imitating strokes**.
 
-2025 IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
+IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 
 🌐 [**Project**](https://hjc-owo.github.io/VectorPainterProject/) |
 📁 [**Code**](https://github.com/hjc-owo/VectorPainter)
