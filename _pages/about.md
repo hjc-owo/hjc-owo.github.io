@@ -38,7 +38,7 @@ I am a master student in Software Engineering at Beihang University, advised by 
 <div class='paper-box-text' markdown="1">
 
 
-[Multi-Object Sketch Animation with Grouping and Motion Trajectory Priors](#)
+[Multi-Object Sketch Animation with Grouping and Motion Trajectory Priors](https://arxiv.org/abs/2508.15535)
 
 Guotao Liang, **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
 
