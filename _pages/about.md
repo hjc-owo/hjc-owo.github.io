@@ -43,12 +43,14 @@ I am a master student in Software Engineering at Beihang University, advised by 
 Guotao Liang, **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-GroupSketch-orange.svg)](https://hjc-owo.github.io/GroupSketchProject/)
+[![](https://img.shields.io/github/stars/Yukinonooo/GroupSketch?style=social&label=Code+Stars)](https://github.com/Yukinonooo/GroupSketch)
 
 <b><u>TL;DR:</u></b> GroupSketch synthesizes **multi-object sketch animations** with **grouping** and **motion trajectory** priors, enabling users to create complex animations with ease.
 
 ACM International Conference on Multimedia, 2025.
 
-🌐 [**Project**](https://hjc-owo.github.io/GroupSketchProject/)
+🌐 [**Project**](https://hjc-owo.github.io/GroupSketchProject/) |
+📁 [**Code**](https://github.com/Yukinonooo/GroupSketch)
 
 </div>
 </div>
