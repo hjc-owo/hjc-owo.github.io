@@ -149,10 +149,10 @@ IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 </div>
 </div>
 
-<!-- # 🎖 Honors and Awards -->
+# 🎖 Honors and Awards
 
-<!-- - _2021.10_ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. -->
-<!-- - _2021.09_ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. -->
+- _2025.12_ Merit Student of Beijing
+- _2025.10_ National Scholarship for Master's Students
 
 # 📖 Educations
 
