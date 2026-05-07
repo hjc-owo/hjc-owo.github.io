@@ -7,7 +7,7 @@
 
 # Site Settings
 title                    : "Juncheng Hu"
-description              : "Master student at BUAA (Beihang University). "
+description              : "Ph.D. student at BUAA (Beihang University)."
 repository               : "hjc-owo.github.io"
 url                      : "https://hjc-owo.github.io"  # 添加明确的URL
 google_scholar_stats_use_cdn : true
@@ -22,7 +22,7 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 
 # Site Author
 author:
-  name             : "Juncheng Hu"
+  name             : "Juncheng Hu\n（胡峻诚）"
   avatar           : "images/hjc-owo.png"
   bio              : "Beihang University"
   location         : "Beijing, China"

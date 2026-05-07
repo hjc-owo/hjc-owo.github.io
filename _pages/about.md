@@ -17,19 +17,45 @@ redirect_from:
 
 <span class='anchor' id='about-me'></span>
 
-I am a master student in Software Engineering at Beihang University, advised by [Prof. Qian Yu](https://yuqian1023.github.io/).
+I am a Ph.D. student in Software Engineering (M.S.–Ph.D. successive program) at the School of Software, Beihang University, advised by [Prof. Qian Yu](https://yuqian1023.github.io/).
+
+My research lies at the intersection of **vector graphics**, **generative models**, and **multimodal large language models**. I am particularly interested in **differentiable SVG rendering**, **text/image-to-SVG generation**, and **vector animation**, with the goal of building systems that understand, create, and edit structured visual content the way designers do.
 
 [![github](https://img.shields.io/badge/dynamic/json?logo=github&label=GitHub%20Stars&style=for-the-badge&query=%24.stars&url=https://api.github-star-counter.workers.dev/user/hjc-owo)](https://github.com/hjc-owo/)
 [![blog](https://img.shields.io/badge/huggingface-space-ffcc00?logo=huggingface&style=for-the-badge)](https://huggingface.co/hjc-owo)
 
 # 🔥 News
 
-- _2025.07_: &nbsp;🎉🎉 Our paper [GroupSketch](https://hjc-owo.github.io/GroupSketchProject/) has been accepted by **ACM MM 2025!**
-- _2025.03_: &nbsp;🎉🎉 Our paper [VectorPainter](https://hjc-owo.github.io/VectorPainterProject/) has been accepted by **ICME 2025!**
-- _2025.02_: &nbsp;🎉🎉 Our paper [LLM4SVG](https://ximinng.github.io/LLM4SVGProject/) has been accepted by **CVPR 2025!**
+- _2026.05_: &nbsp;🎉🎉 Our paper [VAnim](https://yukinonooo.github.io/VAnimProject/) has been accepted by **ICML 2026**!
+- _2025.07_: &nbsp;🎉🎉 Our paper [GroupSketch](https://hjc-owo.github.io/GroupSketchProject/) has been accepted by **ACM MM 2025**!
+- _2025.03_: &nbsp;🎉🎉 Our paper [VectorPainter](https://hjc-owo.github.io/VectorPainterProject/) has been accepted by **ICME 2025**!
+- _2025.02_: &nbsp;🎉🎉 Our paper [LLM4SVG](https://ximinng.github.io/LLM4SVGProject/) has been accepted by **CVPR 2025**!
 - _2023.12_: &nbsp;🎉🎉 We released [PyTorch-SVGRender](https://ximinng.github.io/PyTorch-SVGRender-project/), a state-of-the-art library for differentiable SVG rendering in PyTorch.
 
 # 📝 Publications
+
+<!-- paper 5 -->
+
+<div class='paper-box'>
+<div class='paper-box-image'><div><div class="badge">ICML 2026</div><img src='images/covers/vanim_1.png' loading="lazy" alt="VAnim"><img src='images/covers/vanim_2.png' loading="lazy" alt="VAnim Results" style="margin-top: 0.6em; display: block;"></div></div>
+<div class='paper-box-text' markdown="1">
+
+[VAnim: Rendering-Aware Sparse State Modeling for Structure-Preserving Vector Animation](https://yukinonooo.github.io/VAnimProject/)
+
+Guotao Liang, Zhangcheng Wang, Chuang Wang, **Juncheng Hu**, Haitao Zhou, Junhua Liu, Jing Zhang, Dong Xu, Qian Yu†
+
+[![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-VAnim-orange.svg)](https://yukinonooo.github.io/VAnimProject/)
+[![arXiv](https://img.shields.io/badge/arXiv-2605.01517-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2605.01517)
+
+<b><u>TL;DR:</u></b> VAnim formulates SVG animation as **sparse state updates** on a persistent DOM tree, combining identification-first motion planning with rendering-aware RL to generate **structure-preserving vector animations** from text.
+
+International Conference on Machine Learning (ICML), 2026.
+
+🌐 [**Project**](https://yukinonooo.github.io/VAnimProject/) |
+📄 [**Paper**](https://arxiv.org/abs/2605.01517)
+
+</div>
+</div>
 
 <!-- paper 4 -->
 
@@ -38,11 +64,12 @@ I am a master student in Software Engineering at Beihang University, advised by 
 <div class='paper-box-text' markdown="1">
 
 
-[Multi-Object Sketch Animation with Grouping and Motion Trajectory Priors](https://arxiv.org/abs/2508.15535)
+[Multi-Object Sketch Animation with Grouping and Motion Trajectory Priors](https://hjc-owo.github.io/GroupSketchProject/)
 
-Guotao Liang, **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
+Guotao Liang, **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu†
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-GroupSketch-orange.svg)](https://hjc-owo.github.io/GroupSketchProject/)
+[![arXiv](https://img.shields.io/badge/arXiv-2508.15535-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2508.15535)
 [![](https://img.shields.io/github/stars/Yukinonooo/GroupSketch?style=social&label=Code+Stars)](https://github.com/Yukinonooo/GroupSketch)
 
 <b><u>TL;DR:</u></b> GroupSketch synthesizes **multi-object sketch animations** with **grouping** and **motion trajectory** priors, enabling users to create complex animations with ease.
@@ -50,6 +77,7 @@ Guotao Liang, **Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
 ACM International Conference on Multimedia, 2025.
 
 🌐 [**Project**](https://hjc-owo.github.io/GroupSketchProject/) |
+📄 [**Paper**](https://arxiv.org/abs/2508.15535) |
 📁 [**Code**](https://github.com/Yukinonooo/GroupSketch)
 
 </div>
@@ -57,22 +85,24 @@ ACM International Conference on Multimedia, 2025.
 
 <!-- paper 3 -->
 <div class='paper-box'>
-<div class='paper-box-image'><div><div class="badge">CVPR 2025</div><img src='images/covers/llm4svg.png' loading="lazy" alt="LLM4SVG"></div></div>
+<div class='paper-box-image'><div><div class="badge">CVPR 2025</div><img src='images/covers/llm4svg_1.png' loading="lazy" alt="LLM4SVG"><img src='images/covers/llm4svg_2.png' loading="lazy" alt="LLM4SVG Results" style="margin-top: 0.6em; display: block;"></div></div>
 <div class='paper-box-text' markdown="1">
 
-[Empowering LLMs to Understand and Generate Complex Vector Graphics](https://arxiv.org/abs/2412.11102)
+[Empowering LLMs to Understand and Generate Complex Vector Graphics](https://ximinng.github.io/LLM4SVGProject/)
 
-Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu
+Ximing Xing, **Juncheng Hu**, Guotao Liang, Jing Zhang, Dong Xu, Qian Yu†
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-LLM4SVG-orange.svg)](https://ximinng.github.io/LLM4SVGProject/)
+[![arXiv](https://img.shields.io/badge/arXiv-2412.11102-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2412.11102)
 [![dataset](https://img.shields.io/badge/Dataset-SVGX_SFT_1M-ffcc00?logo=huggingface)](https://huggingface.co/datasets/xingxm/SVGX-SFT-1M)
 [![](https://img.shields.io/github/stars/ximinng/LLM4SVG?style=social&label=Code+Stars)](https://github.com/ximinng/LLM4SVG)
 
 <b><u>TL;DR:</u></b> LLM4SVG introduces learnable **SVG Semantic Tokens** and a large **SVGX-SFT dataset**, enabling LLMs to understand and generate complex vector graphics.
 
-IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025
+IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025.
 
 🌐 [**Project**](https://ximinng.github.io/LLM4SVGProject/) |
+📄 [**Paper**](https://arxiv.org/abs/2412.11102) |
 📁 [**Code**](https://github.com/ximinng/LLM4SVG) |
 🤗 [**SVGX-SFT-1M Dataset**](https://huggingface.co/datasets/xingxm/SVGX-SFT-1M)
 
@@ -84,17 +114,19 @@ IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025
 <div class='paper-box-image'><div><div class="badge">arXiv 2024</div><img src='images/covers/svgfusion.png' loading="lazy" alt="SVGFusion"></div></div>
 <div class='paper-box-text' markdown="1">
 
-[SVGFusion: Scalable Text-to-SVG Generation via Vector Space Diffusion](https://arxiv.org/abs/2412.10437)
+[SVGFusion: Scalable Text-to-SVG Generation via Vector Space Diffusion](https://ximinng.github.io/SVGFusionProject/)
 
-Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
+Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu†
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-SVGFusion-orange.svg)](https://ximinng.github.io/SVGFusionProject/)
+[![arXiv](https://img.shields.io/badge/arXiv-2412.10437-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2412.10437)
 [![dataset](https://img.shields.io/badge/Dataset-SVGX_Core_250k-ffcc00?logo=huggingface)](https://huggingface.co/datasets/xingxm/SVGX-Core-250k)
 [![](https://img.shields.io/github/stars/ximinng/SVGFusion?style=social&label=Code+Stars)](https://github.com/ximinng/SVGFusion)
 
 <b><u>TL;DR:</u></b> SVGFusion improves text-to-SVG generation by using a **VP-VAE to learn a vector representation of SVG elements**, and a **VS-DiT** to generate SVGs from text prompts by performing diffusion within that **learned vector space**.
 
 🌐 [**Project**](https://ximinng.github.io/SVGFusionProject/) |
+📄 [**Paper**](https://arxiv.org/abs/2412.10437) |
 📁 [**Code**](https://github.com/ximinng/SVGFusion) ｜
 🤗 [**SVGX-Core-250k Dataset**](https://huggingface.co/datasets/xingxm/SVGX-Core-250k)
 
@@ -106,11 +138,12 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 <div class='paper-box-image'><div><div class="badge">ICME 2025</div><img src='images/covers/vectorpainter.png' loading="lazy" alt="VectorPainter"></div></div>
 <div class='paper-box-text' markdown="1">
 
-[VectorPainter: Advanced Stylized Vector Graphics Synthesis Using Stroke-Style Priors](https://arxiv.org/abs/2405.02962)
+[VectorPainter: Advanced Stylized Vector Graphics Synthesis Using Stroke-Style Priors](https://hjc-owo.github.io/VectorPainterProject/)
 
-**Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu
+**Juncheng Hu**, Ximing Xing, Jing Zhang, Qian Yu†
 
 [![project](https://img.shields.io/badge/%F0%9F%8F%A0%20Homepage-VectorPainter-orange.svg)](https://hjc-owo.github.io/VectorPainterProject/)
+[![arXiv](https://img.shields.io/badge/arXiv-2405.02962-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2405.02962)
 [![](https://img.shields.io/github/stars/hjc-owo/VectorPainter?style=social&label=Code+Stars)](https://github.com/hjc-owo/VectorPainter)
 
 <b><u>TL;DR:</u></b> VectorPainter synthesizes text-guided vector graphics by **imitating strokes**.
@@ -118,6 +151,7 @@ Ximing Xing, **Juncheng Hu**, Jing Zhang, Dong Xu, Qian Yu
 IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 
 🌐 [**Project**](https://hjc-owo.github.io/VectorPainterProject/) |
+📄 [**Paper**](https://arxiv.org/abs/2405.02962) |
 📁 [**Code**](https://github.com/hjc-owo/VectorPainter)
 
 </div>
@@ -136,7 +170,7 @@ IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 
 <b><u>TL;DR:</u></b> SVG Differentiable Rendering: Generating vector graphics using neural networks. Support: text-to-SVG, Image-to-SVG, SVG Editing.
 
-<a href="https://ximinng.github.io/PyTorch-SVGRender-project/"><img src="https://img.shields.io/badge/Website-Gitpage-yellow" alt="website"></a>
+<a href="https://ximinng.github.io/PyTorch-SVGRender-project/"><img src="https://img.shields.io/badge/%F0%9F%8F%A0%20Website-Gitpage-yellow" alt="website"></a>
 <a href="https://pytorch-svgrender.readthedocs.io/en/latest/index.html"><img src="https://img.shields.io/badge/DOCS-Readthedocs-purple?logo=readthedocs" alt="docs"></a>
 <a href="https://huggingface.co/SVGRender"><img src="https://img.shields.io/badge/SPACE-HuggingFace-ffcc00?logo=huggingface" alt="space"></a>
 [![](https://img.shields.io/github/stars/ximinng/PyTorch-SVGRender?style=social&label=Code+Stars)](https://github.com/ximinng/PyTorch-SVGRender)
@@ -156,7 +190,7 @@ IEEE International Conference on Multimedia and Expo (ICME). IEEE, 2025.
 
 # 📖 Educations
 
-- _2024.09 – Present_: **M.S. in Software Engineering**, School of Software, Beihang University
+- _2024.09 – Present_: **Ph.D. in Software Engineering** (M.S.–Ph.D. Successive Program), School of Software, Beihang University
 
 - _2019.09 – 2024.06_: **B.S. in Software Engineering**, School of Software, Beihang University
   - **GPA**: 3.95730 / 4.00
